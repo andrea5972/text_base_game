@@ -48,7 +48,7 @@ public class Zantar {
 
 	public Backpack getBackpack() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Backpack();
 	}
 
 }

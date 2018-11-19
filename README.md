@@ -6,10 +6,10 @@ A text-based adventure game. Played as the mighty hero Zantar who is on a quest 
 ## Usage
 
 ```sh
-$ git clone https://github.com/andrea5972/text_base_game
+download zip file https://github.com/andrea5972/text_base_game
 $ cd text_base_game
-$ javac text_base_game.java
-$ java text_base_game
+$ javac game.java
+$ java game
 
 ```
 
