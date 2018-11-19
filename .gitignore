@@ -1,6 +1,7 @@
 
 # Compiled class file
 *.class
+*.classpath
 
 # Log file
 *.log
@@ -24,7 +25,7 @@
 hs_err_pid*
 
 
-# OS generated files 
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
