@@ -5,7 +5,8 @@
 
 package zantar;                                                                                                                                                                                                                  
                                                                                                                                                                                                                                  
-import java.util.Scanner;                                                                                                                                                                                                        
+import java.util.Scanner;
+import java.io.File;
 import java.util.Random;                                                                                                                                                                                                         
                                                                                                                                                                                                     
                                                                                                                                                                                                                                  
@@ -37,6 +38,7 @@ public class Game {
 		Zantar zantar = Zantar.getInstance();
 		//Backpack backpack = zantar.getBackpack();
 		Map map = Map.getInstance();
+		//System.out.println(new File(".").getAbsoluteFile());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 		boolean running = true;                                                                                                                                                                                                  
 		boolean ranAway = false;                                                                                                                                                                                                 

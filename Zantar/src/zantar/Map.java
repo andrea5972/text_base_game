@@ -1,17 +1,23 @@
 package zantar;
 
 import java.io.BufferedReader;
+import java.util.Scanner; 
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Map {
 	
 	private static Map INSTANCE;
-	private int zone = 1;
+	private String zone = "1";
+	private String map;
 	BufferedReader reader = null;
+	Scanner scanner;
+	ArrayList<String> locations = new ArrayList<>();
 	
 	private Map() {
-		File file = new File("map" + zone + ".txt");
+		map = "/Zantar/map1.txt";
+		scanner = new Scanner(new FileReader("/Zantar/map1.txt"));
 	}
 	
 	public static Map getInstance() {
