@@ -13,148 +13,42 @@ public class Game {
 	public static final Random RANDOM = new Random();                                                                                                                                                                            
 	public static final Scanner SCANNER = new Scanner(System.in);                                                                                                                                                                
                                                                                                                                                                                                                                  
-	/** The menu options*/                                                                                                                                                                                                       
+	/** The menu options                                                                                                                                                                                                       
 	public static final int attack = 1;                                                                                                                                                                                          
 	public static final int use_item = 2;                                                                                                                                                                                        
 	public static final int run = 3;                                                                                                                                                                                             
 	public static final int exit_game = 4;                                                                                                                                                                                       
-                                                                                                                                                                                                                                 
-	/** The string which contains all accepted answers to yes or no questions */                                                                                                                            
+    */
+	
+	/** The string which contains all accepted answers to yes or no questions                                                                                                                            
 	public static final String confirmation = "yes no";                                                                                                                                                                          
                                                                                                                                                                                                                                  
 	public static final long delay = 2000;                                                                                                                                                                                       
                                                                                                                                                                                                                                  
-	public static final int max_gold = 30;                                                                                                                                                                                       
-                                                                                                                                                                                                                                 
+	public static final int max_gold = 30;
+	*/       
+	
+	public static final long delay = 2000;                                                                                                                                                                                                                             
 	public static final int penance_for_cowardliness = 5;                                                                                                                                                                             
                                                                                                                                                                                                                                  
 	public static void main(String[] argument) {                                                                                                                                                                                  
 		
 		// Main character                                                                                                                                                                                                        
-		Zantar zantar = new Zantar();
-		Backpack backpack = zantar.getBackpack();
+		Zantar zantar = Zantar.getInstance();
+		//Backpack backpack = zantar.getBackpack();
+		Map map = Map.getInstance();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 		boolean running = true;                                                                                                                                                                                                  
 		boolean ranAway = false;                                                                                                                                                                                                 
                                                                                                                                                                                                                                  
 		// Introduction to the Game                                                                                                                                                                                              
-		System.out.println("\fWelcome mighty Zantar on your quests to save the world.");                                                                                                                                                  
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-	while(running) {
-		
-		//The antagonists
-		Enemy villain = new Enemy();                                                                                                                                                                                             
-                                                                                                                                                                                                                                 
-		while (villain.health() > 0) {                                                                                                                                                                                            
-                                                                                                                                                                                                                                 
-			printStatistics(zantar, villain);                                                                                                                                                                                    
-			
-			startBattle();                                                                                                                                                                                                       
-                                                                                                                                                                                                                               
-			int choice;                                                                                                                                                                                                          
-                                                                                                                                                                                                                                 
-			try {                                                                                                                                                                                                                  
-			                                                                                                                                                                                                                   
-				choice = Integer.parseInt(SCANNER.nextLine());                                                                                                                                                                   
-			}                                                                                                                                                                                                                    
-			catch (NumberFormatException exception)                                                                                                                                                                              
-			{                                                                                                                                                                                                                    
-				choice = run;                                                                                                                                                                                                    
-			}                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                 
-			switch (choice) {                                                                                                                                                                                                     
-			                                                                                                                                                                                                                   
-			case attack:                                                                                                                                                                                                         
-				ranAway = false;                                                                                                                                                                                                 
-				int zantarAttack = zantar.attack();                                                                                                                                                                              
-				int enemyAttack = villain.attack();                                                                                                                                                                              
-                                                                                                                                                                                                                                 
-				System.out.println("\nYou dealt " + zantarAttack + " damage.");                                                                                                                                                  
-				System.out.println("You took " + enemyAttack + " damage.");                                                                                                                                                      
-                                                                                                                                                                                                                                 
-				villain.takeDamage(zantarAttack);                                                                                                                                                                                
-				zantar.takeDamage(enemyAttack);                                                                                                                                                                                  
-                                                                                                                                                                                                                                 
-				delay();                                                                                                                                                                                                         
-				break;                                                                                                                                                                                                           
-                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-			case run:                                                                                                                                                                                                            
-				// Penalty for running away
-				
-				if (zantar.getBackpack().getCoins() > penance_for_cowardliness)                                                                                                                                                                
-				{                                                                                                                                                                                                                
-					System.out.println("\n" + penance_for_cowardliness + " coins were stolen by the " + villain.name());                                                                                                              
-					
-					zantar.removeCoins(penance_for_cowardliness);                                                                                                                                                                      
-				}                                                                                                                                                                                                                
-				
-				/* If Zantar does not have enough coins
-				   Take away health instead of coins. */                                                                                                                                      
-				
-				else                                                                                                                                                                                                             
-				{                                                                                                                                                                                                                
-					System.out.println("\nThe enemy did " + penance_for_cowardliness + " damage before you managed to escape");                                                                                                       
-					zantar.takeDamage(penance_for_cowardliness);                                                                                                                                                                      
-				}                                                                                                                                              
-                                                                                                                                                                                                                                 
-				System.out.println("\nYou successfully ran from your fears...");                                                                                                                                                              
-				delay();                                                                                                                                                                                                         
-                                                                                                                                                                                                                                 
-				// Kill the antagonists by dealing damage equivalent to its health
-				
-				villain.takeDamage(villain.health());                                                                                                                                                                            
-                                                                                                                                                                                                                                 
-				ranAway = true;                                                                                                                                                                                                  
-				break;                                                                                                                                                                                                           
-                                                                                                                                                                                                                                 
-			case exit_game:                                                                                                                                                                                                           
-				System.out.println("\fExiting the game...sadface");                                                                                                                                                                        
-                                                                                                                                                                                                                                 
-			    if (confirmation.contains(SCANNER.nextLine()))
-                  {
-     
-                  } 
-
-                  running = false;
-                  return;
-          }
-			
-			
-				if (zantar.health() <= 0) {
-					                                                                                                                                                                                                                
-					System.out.println("\nYou have died, and didn't save the world...game over for us all.");                                                                                                                                                    
-                                                                                                                                                                                                                                 
-					System.out.print("Zantar would you like to try again? ");                                                                                                                                                             
-					String continueGame = SCANNER.nextLine();                                                                                                                                                                    
-                                                                                                                                                                                                                                 
-					if (confirmation.contains(continueGame)) {
-						
-						running = true;                                                                                                                                                                                          
-						zantar.reset();                                                                                                                                                                                          
-					}                                                                                                                                                                           
-					else                                                                                                                                                                                                         
-					{                                                                                                                                                                                                            
-						System.out.println("\nGame has been terminated, the world has ended");                                                                                                                                                             
-					
-						// Kill the antagonists by dealing damage                                                                                                                                        
-						villain.takeDamage(villain.health());                                                                                                                                                                    
-						running = false;                                                                                                                                                                                         
-						return;
-					}
-				}
-		}
-		
-		if (!ranAway)
-		{
-			 // The the antagonists has died, reward Zantar. */
-            zantar.increaseEnemiesKilled();
-
-            /* Give the player some gold for killing the enemy. */
-            backpack.addCoins(RANDOM.nextInt(max_gold));
-            delay();
-		}
+		System.out.println("Welcome, mighty Zantar, on your quest to save the planet Mangani.\n"
+				+ "You arrived last night in the middle of a jungle, but your\n"
+				+ "items were stolen while you slept! You'll need to search\n"
+				+ "and find them to have any chance of defeating\n"
+				+ "the evil King. What will you do first?\n\n");
+				//+ "There are openings to the north, east, south, and west.");
 	}
-}
                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 	private static void printStatistics(Zantar zantar, Enemy villain) {
 			
