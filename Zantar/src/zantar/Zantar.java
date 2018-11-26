@@ -6,6 +6,7 @@ package zantar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Zantar {
 
@@ -15,6 +16,7 @@ public class Zantar {
 	private int xCoord = 0;
 	private int yCoord = 0;
 	private int health = 20;
+	private int index = -1;
 	
 	private Zantar() {
 		zantar = new ArrayList<>();
@@ -27,23 +29,35 @@ public class Zantar {
 		return INSTANCE;
 	}
 	
-	public void move(String word) {
-		zantar.add(word);
-		if (word == "north") {
+	public boolean move(String word) {
+		//System.out.println(word);
+		if (word.toLowerCase().equals("north")) {
+			zantar.add(word);
 			yCoord++;
-			System.out.println("Player moved north. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved north. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			return true;
 		}
-		else if (word == "south") {
+		else if (word.toLowerCase().equals("south")) {
+			zantar.add(word);
 			yCoord--;
-			System.out.println("Player moved south. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved south. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			return true;
 		}
-		else if (word == "east") {
+		else if (word.toLowerCase().equals("east")) {
+			zantar.add(word);
 			xCoord++;
-			System.out.println("Player moved east. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved east. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			return true;
 		}
-		else if (word == "west") {
+		else if (word.toLowerCase().equals("west")) {
+			zantar.add(word);
 			xCoord--;
-			System.out.println("Player moved west. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved west. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			return true;
+		}
+		else {
+			System.out.println("Zantar could not go that way. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			return false;
 		}
 	}
 	
@@ -51,19 +65,19 @@ public class Zantar {
 		zantar.remove(word);
 		if (word == "north") {
 			yCoord--;
-			System.out.println("Player moved south. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved south. xCoord: " + xCoord + ", yCoord: " + yCoord);
 		}
 		else if (word == "south") {
 			yCoord++;
-			System.out.println("Player moved north. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved north. xCoord: " + xCoord + ", yCoord: " + yCoord);
 		}
 		else if (word == "east") {
 			xCoord--;
-			System.out.println("Player moved west. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved west. xCoord: " + xCoord + ", yCoord: " + yCoord);
 		}
 		else if (word == "west") {
 			xCoord++;
-			System.out.println("Player moved east. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved east. xCoord: " + xCoord + ", yCoord: " + yCoord);
 		}
 	}
 	
@@ -72,7 +86,7 @@ public class Zantar {
 	}
 	
 	public void printXY() {
-		System.out.println("Player position is: xCoord: " + xCoord + ", yCoord: " + yCoord);
+		System.out.println("Zantar's position is: xCoord: " + xCoord + ", yCoord: " + yCoord);
 	}
 	
 	public int attack() {

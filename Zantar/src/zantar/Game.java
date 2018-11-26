@@ -41,15 +41,30 @@ public class Game {
 		//System.out.println(new File(".").getAbsoluteFile());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 		boolean running = true;                                                                                                                                                                                                  
-		boolean ranAway = false;                                                                                                                                                                                                 
+		boolean ranAway = false;
+		boolean moving = true;
                                                                                                                                                                                                                                  
 		// Introduction to the Game                                                                                                                                                                                              
 		System.out.println("Welcome, mighty Zantar, on your quest to save the planet Mangani.\n"
 				+ "You arrived last night in the middle of a jungle, but your\n"
 				+ "items were stolen while you slept! You'll need to search\n"
 				+ "and find them to have any chance of defeating\n"
-				+ "the evil King. What will you do first?\n\n");
-				//+ "There are openings to the north, east, south, and west.");
+				+ "the evil King. What will you do first?\n\n"
+				+ "There are openings to the north, east, south, and west.\n");
+				
+		while (running) {
+			
+			while (moving) {
+				
+				//zantar.printXY();
+				String choice = SCANNER.nextLine();
+				zantar.move(choice);
+				//if (zantar.move(choice)) {
+				//	System.out.println("You moved " + choice.toLowerCase() + "!");
+				//}
+				
+			}
+		}
 	}
                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 	private static void printStatistics(Zantar zantar, Enemy villain) {
