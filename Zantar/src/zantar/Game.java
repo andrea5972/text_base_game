@@ -7,6 +7,7 @@ package zantar;
                                                                                                                                                                                                                                  
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;                                                                                                                                                                                                         
                                                                                                                                                                                                     
                                                                                                                                                                                                                                  
@@ -32,7 +33,7 @@ public class Game {
 	public static final long delay = 2000;                                                                                                                                                                                                                             
 	public static final int penance_for_cowardliness = 5;                                                                                                                                                                             
                                                                                                                                                                                                                                  
-	public static void main(String[] argument) {                                                                                                                                                                                  
+	public static void main(String[] argument) throws FileNotFoundException {                                                                                                                                                                                  
 		
 		// Main character                                                                                                                                                                                                        
 		Zantar zantar = Zantar.getInstance();
