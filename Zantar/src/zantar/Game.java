@@ -40,19 +40,50 @@ public class Game {
 		Map map = Map.getInstance();
 		//System.out.println(new File(".").getAbsoluteFile());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-		boolean running = true;                                                                                                                                                                                                  
+		boolean running = true;
+		boolean menu = true;
 		boolean ranAway = false;
-		boolean moving = true;
-                                                                                                                                                                                                                                 
-		// Introduction to the Game                                                                                                                                                                                              
-		System.out.println("Welcome, mighty Zantar, on your quest to save the planet Mangani.\n"
-				+ "You arrived last night in the middle of a jungle, but your\n"
-				+ "items were stolen while you slept! You'll need to search\n"
-				+ "and find them to have any chance of defeating\n"
-				+ "the evil King. What will you do first?\n\n"
-				+ "There are openings to the north, east, south, and west.\n");
+		boolean moving = false;
+		boolean starting = true;
+		
 				
 		while (running) {
+			
+			while (menu) {
+				System.out.println("\nWelcome! Zantar and his mighty quest awaits.\n"
+						+ "If you wish to play the game, enter Start.\n"
+						+ "For help. enter Help. To quit, enter Quit!\n");
+				String choice = SCANNER.nextLine();
+				if (choice.toLowerCase().equals("start")) {
+					menu = false;
+					moving = true;
+				}
+				else if (choice.toLowerCase().equals("help")) {
+					System.out.println("\nZantar is a text based adventure in which you control Zantar,\n"
+							+ "a mighty space warrior. You'll navigate around areas, picking up items\n"
+							+ "and battling enemies. At any point, hit the ESC key to bring up the menu again.\n");
+				}
+				else if (choice.toLowerCase().equals("quit")) {
+					System.out.println("\nZantar will await your return, but be careful not to be away too long,\n"
+							+ "as the Evil King will not wait on his journey for control of the planet!\n");
+					menu = false;
+					running = false;
+				}
+				else {
+					System.out.println("\nThat command is not acceptable here, please try again!\n");
+				}
+			}
+			
+			// Introduction to the Game                                                                                                                                                                                              
+			if (starting) {
+				System.out.println("Welcome, mighty Zantar, on your quest to save the planet Mangani.\n"
+					+ "You arrived last night in the middle of a jungle, but your\n"
+					+ "items were stolen while you slept! You'll need to search\n"
+					+ "and find them to have any chance of defeating\n"
+					+ "the Evil King. What will you do first?\n\n"
+					+ "There are openings to the north, east, south, and west.\n");
+				starting = false;
+			}
 			
 			while (moving) {
 				
