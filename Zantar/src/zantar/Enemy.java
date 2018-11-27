@@ -11,7 +11,7 @@ public class Enemy {
 	public static final Random RANDOM = new Random(); 
 	
 	// An array of possible enemy types
-	public static final String[] ENEMY_NAMES = { "Troll", "Chipmunk", "Zombie", "Rabit", "Warrior", "Goblin" };
+	public static final String[] ENEMY_NAMES = { "Imp", "Slime", "Troll", "Chipmunk", "Zombie", "Rabit", "Warrior", "Goblin" };
 	
 	public static final int max_attack_damage = 20;
 	
