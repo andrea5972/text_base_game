@@ -18,9 +18,10 @@ public class Enemy {
 	public static final int max_health = 75;
 	
 	public static final int min_health = 1;
-
-    private int health;
-    private String name;
+	
+	private int health;
+	
+	private String name;
 
 	public int attack() {
 		// TODO Auto-generated method stub
