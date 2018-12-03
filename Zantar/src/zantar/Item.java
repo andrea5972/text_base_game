@@ -18,6 +18,7 @@ public class Item {
 	private boolean isnoncombat = false;
 	private String desc;
 	private String message;
+	private boolean equiped = false;
 	
 	private int charges;
 	
@@ -54,7 +55,6 @@ public class Item {
 		if(isconsumable) 
 		{
 			charges = charges - 1;
-			
 		}
 		if(isunstopable || isnoncombat ) 
 		{
@@ -96,8 +96,20 @@ public class Item {
 		return hitProbability;
 	}
 	
+	public double getHitProbabilityForEnemy(Enemy e) {
+		if (e.weakness(name)) {
+			return weaknessOfVillianHitProbability;
+		} else {
+			return hitProbability;
+		}
+	}
+	
 	public double getWeaknessOfVillianHitProbability() {
 		return weaknessOfVillianHitProbability;
+	}
+	
+	public String name() {
+		return name;
 	}
 	
 	public String toString() {
@@ -107,8 +119,14 @@ public class Item {
 		ret += hitProbability;
 		ret += ", weakness of villian hit probability: ";
 		ret += weaknessOfVillianHitProbability;
+		ret += ", Equiped: ";
+		ret += Boolean.toString(equiped);
 		ret += ")";
 		return ret;
+	}
+	
+	public void equip() {
+		this.equiped = true;
 	}
 
 }

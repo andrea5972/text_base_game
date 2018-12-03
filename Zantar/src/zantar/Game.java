@@ -61,15 +61,38 @@ public class Game {
 			
 			if (movements.contains(choice)) {
 				moveZantar(choice);
-			} else if (item_commands.contains(choice)) {
+			} else if (item_commands.contains(choice.split(" ")[0])) {
 				if (choice.equals("backpack")) {
 					Backpack.getInstance().printBackPack();
+				} else if (choice.contains("equip")) {
+					if (choice.split(" ").length < 2) {
+						System.out.println("Choose an item from backpack to equip!");
+						continue;
+					}
+					String itemName = choice.split(" ")[1];
+					if (!itemName.isEmpty()) {
+						if(Backpack.getInstance().equip(itemName)) {
+							System.out.println(itemName + " successfully equiped!");
+						} else {
+							System.out.println("Equip of " + itemName + " failed! "
+									+ "No such item exists in your backpack!");
+						}
+					} else {
+						System.out.println("Zantar doesn't understand!");
+					}
 				}
 			} else {
 				System.out.println("Zantar doesn't understand!");
 				System.out.println("Enter help to get help.");
 			}
 			
+		}
+		
+		if (!Zantar.getInstance().isAlive()) {
+			System.out.println("Zantar failed in his quest to save the world and became one of the"
+					+ " many brave souls who gave up their \nlives to save the world! \nBut, there "
+					+ "is still hope for the world in warriors like you if you decide to "
+					+ "try again.");
 		}
 	}
 	
@@ -91,17 +114,20 @@ public class Game {
 		if (locData != null) {
 			if (locData.equals("enemy")) {
 				Enemy enemy = new Enemy();
-				if(foundEnemy(enemy)) { 
-					
+				if(foundEnemy(enemy)) { 				
 				} else {
-					Zantar.getInstance().runAway();
-					System.out.println("*Zantar takes a deep breath and thinks 'As long"
-							+ " as I have my life, I can go back and kill that " + 
-							enemy.name() + " anytime!\nI will adventure more and go "
-							+ "back to kill "+ enemy.name() + " when I get stronger!'"
-							+ "* Let's start over!");
-					Backpack.getInstance().printBackPack();
-					Zantar.getInstance().printXY();
+					if (Zantar.getInstance().isAlive()) {
+						Zantar.getInstance().runAway();
+						System.out.println("*Zantar takes a deep breath and thinks 'As long"
+								+ " as I have my life, I can go back and kill that " + 
+								enemy.name() + " anytime!\nI will adventure more and go "
+								+ "back to kill "+ enemy.name() + " when I get stronger!'"
+								+ "* Let's start over!");
+						Backpack.getInstance().printBackPack();
+						Zantar.getInstance().printXY();
+					} else {
+						runningGame = false;
+					}
 				}
 			} else {
 				if (foundItem(locData)) {
@@ -149,7 +175,7 @@ public class Game {
 		System.out.println("Would you like to fight or beg for mercy");
 		String choice = getChoice();
 		if (choice.equals("fight")) {
-			return startBattle();
+			return startBattle(enemy);
 		} else if ("beg for mercy".contains(choice)) {
 			begForMercy(enemy.name());
 			return false;
@@ -172,16 +198,59 @@ public class Game {
 	}
                                                                                                                                                                                                                           
 	// The battle prompt menu                                                                                                                                                                                                                                                                                                                                                                                                          
-	private static boolean startBattle()                                                                                                                                                                                             
-	{                                                                                                                                                                                                                            
-		System.out.println("\n1. Attack.");                                                                                                                                                                                      
-		System.out.println("2. Use Item");                                                                                                                                                                                    
-		System.out.println("3. Run!");                                                                                                                                                                                                                                                                                                                                                                             
-		System.out.println("4. Exit Game.");                                                                                                                                                                                     
-                                                                                                                                                                                                                                 
-		System.out.print("\nChoice? ");   
+	private static boolean startBattle(Enemy enemy)                                                                                                                                                                                             
+	{    
+		System.out.println("*Zantar yells out*\n'Hey stupid " + enemy.name() + 
+				"! Come here and let Mighty Zantar put an end to your puny life!");
+		System.out.print("*" + enemy.name() + " is enraged and roars* YOU PUNY LITTLE HUMAN, "
+				+ "I AM GOING TO KILL YOU!\n*Enemy charges towards Zantar*\n"
+				+ "*Zantar charges towards enemy");
+		if (Zantar.getInstance().isItemEquiped()) {
+			System.out.print(" with " + Zantar.getInstance().getEquipedItem().name() + " in "
+					+ "hand.");
+		} else {
+			System.out.println("!");
+		}
+		boolean enemyAttacksFirst = RANDOM.nextBoolean();
+		if (enemyAttacksFirst) {
+			System.out.println(enemy.name() + " attacked first!");
+			enemyAttack();
+		}
+		while (enemy.isAlive()) {
+			System.out.println("Zantar prepares to attack! What will you choose?");
+			System.out.println("Attack!");                                                                                                                                                                                   
+			System.out.println("Beg for mercy!");      
+			String choice = getChoice();
+			if ("beg for mercy".contains(choice)) {
+				System.out.println("*Zantar drops all defences!*");
+				if (RANDOM.nextBoolean()) {
+					begForMercy(enemy.name());
+					return false;
+				} else {
+					System.out.println(enemy.name() + " is too enraged to listen to Zantar's "
+							+ "plea for life! " + enemy.name() + " kills the defenceless Zantar!");
+					Zantar.getInstance().takeDamage(100);
+					return false;
+				}
+			} else if (choice.equals("fight")) {
+				
+			} else {
+				System.out.println("Zantar doesn't understand!");
+				continue;
+			}
+		}
+                                        
 		return true;
-	}            
+	}      
+	
+	public static void enemyAttack() {
+		if (RANDOM.nextBoolean()) {
+			System.out.println("Zantar couldn't dodge the attack!");
+			Zantar.getInstance().takeDamage(Enemy.max_attack_damage);
+		} else {
+			System.out.println("Zantar dodges the attack without taking any damage!");
+		}
+	}
 	
 	private static void showHelp() {
 		System.out.println("Zantar is a text based adventure in which you control Zantar,"
