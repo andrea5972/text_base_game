@@ -32,7 +32,7 @@ public class Enemy {
 		int r = RANDOM.nextInt(8);
 		name = ENEMY_NAMES.get(r);
 		weakness = ITEM_WEAKNESS.get(r);
-		
+		health = max_health;
 	}
 
 	public int attack() {
@@ -48,11 +48,15 @@ public class Enemy {
 	}
 
 	public String name() {
-		return name;
+		return Character.toUpperCase(name.charAt(0)) + name.substring(1, name.length());
 	}
 	
 	public boolean weakness(String item) {
 		return weakness.equals(item);
+	}
+	
+	public boolean isAlive() {
+		return health >= min_health; 
 	}
 
 }

@@ -53,6 +53,16 @@ public class Backpack{
     	itemList.add(i);
     }
     
+    public boolean equip(String itemName) {
+    	for (Item item : itemList) {
+    		if (item.name().equals(itemName)) {
+    			Zantar.getInstance().equipItem(item);
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
     public void printBackPack() {
     	System.out.println("Currently your backpack contains:");
     	System.out.println("Gold: " + coins);

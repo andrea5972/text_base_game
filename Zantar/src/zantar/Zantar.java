@@ -15,12 +15,15 @@ public class Zantar {
 	private Backpack backpack;
 	private int xCoord = 0;
 	private int yCoord = 0;
-	private int health = 20;
+	private int health = 100;
 	private int index = -1;
 	private int attack_strength = 10;
 	private double attackProbility = 0.5;
 	private String[] enemiesKilled;
 	private int numEnemiesKilled = 0;
+	
+	private boolean itemEquiped = false;
+	private Item item;
 	
 	private Zantar() {
 		zantar = new ArrayList<>();
@@ -130,7 +133,8 @@ public class Zantar {
 	}
 
 	public void takeDamage(int enemyAttack) {
-		health -= enemyAttack;		
+		health -= enemyAttack;	
+		System.out.println("Zantar lost " + enemyAttack + " HP! Zantar has " + health + " left!");
 	}
 
 	public int health() {
@@ -165,7 +169,10 @@ public class Zantar {
 		return backpack;
 	}
 	
-	public double getAttackProbability() {
+	public double getAttackProbabilityForEnemy(Enemy e) {
+		if (itemEquiped) {
+			return item.getHitProbability();
+		}
 		return attackProbility;
 	}
 	
@@ -173,8 +180,31 @@ public class Zantar {
 		this.attackProbility = p;
 	}
 	
+	public void equipItem(Item i) {
+		this.item = i;
+		this.itemEquiped = true;
+		item.equip();
+	}
+	
+	public Item getEquipedItem() {
+		return this.item;
+	}
+	
+	public void UnEquipItem() {
+		this.item = null;
+		itemEquiped = false;
+	}
+	
 	public void setAttackStrength(int attackStrength) {
 		this.attack_strength = attackStrength;
+	}
+	
+	public boolean isItemEquiped() {
+		return itemEquiped;
+	}
+	
+	public boolean isAlive() {
+		return health > 0;
 	}
 
 }
