@@ -1,5 +1,9 @@
-0,0+north,east,south,west+none
-0,1+north,east,south,west+sword
-1,0+north,east,south,west+dagger
-0,-1+north,east,south,west+axe
--1,0+north,east,south,west+stick
+5,-5,5,-5
+0,1+sword
+1,0+dagger
+0,-1+axe
+-1,0+stick
+5,0+enemy
+0,5+enemy
+-5,0+enemy
+0,-5+enemy

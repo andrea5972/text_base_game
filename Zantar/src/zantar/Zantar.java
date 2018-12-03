@@ -6,17 +6,18 @@ package zantar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Zantar {
 
 	private static Zantar INSTANCE;
+	
 	private List<String> zantar;
 	private Backpack backpack;
 	private int xCoord = 0;
 	private int yCoord = 0;
 	private int health = 20;
 	private int index = -1;
+	private int attack_strength = 10;
 	
 	private Zantar() {
 		zantar = new ArrayList<>();
@@ -30,55 +31,86 @@ public class Zantar {
 	}
 	
 	public boolean move(String word) {
-		//System.out.println(word);
-		if (word.toLowerCase().equals("north")) {
+		if (word.equals("north")) {
+			if (yCoord == Map.getInstance().NORTH_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further north in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			yCoord++;
-			System.out.println("Zantar moved north. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved north.");
 			return true;
-		}
-		else if (word.toLowerCase().equals("south")) {
+		} else if (word.equals("south")) {
+			if (yCoord == Map.getInstance().SOUTH_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further south in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			yCoord--;
-			System.out.println("Zantar moved south. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved south.");
 			return true;
-		}
-		else if (word.toLowerCase().equals("east")) {
+		} else if (word.equals("east")) {
+			if (yCoord == Map.getInstance().EAST_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further east in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			xCoord++;
-			System.out.println("Zantar moved east. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved east.");
 			return true;
-		}
-		else if (word.toLowerCase().equals("west")) {
+		} else if (word.equals("west")) {
+			if (yCoord == Map.getInstance().WEST_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further west in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			xCoord--;
-			System.out.println("Zantar moved west. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved west.");
 			return true;
-		}
-		else {
-			System.out.println("Zantar could not go that way. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+		} else if (word.equals("undo")) {
+			return undoMove();
+		} else {
+			System.out.println("Zantar could not go that way!");
 			return false;
 		}
 	}
 	
-	public void undoMove(String word) {
-		zantar.remove(word);
-		if (word == "north") {
+	public boolean undoMove() {
+		if (index < 0) {
+			System.out.println("No more moves left to undo!");
+			return false;
+		}
+		String word = zantar.remove(index);
+		index--;
+		if (word.equals("north")) {
 			yCoord--;
-			System.out.println("Zantar moved south. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved south.");
 		}
-		else if (word == "south") {
+		else if (word.equals("south")) {
 			yCoord++;
-			System.out.println("Zantar moved north. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved north.");
 		}
-		else if (word == "east") {
+		else if (word.equals("east")) {
 			xCoord--;
-			System.out.println("Zantar moved west. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved west.");
 		}
-		else if (word == "west") {
+		else if (word.equals("west")) {
 			xCoord++;
-			System.out.println("Zantar moved east. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved east.");
 		}
+		return true;
+	}
+	
+	public int getX() {
+		return xCoord;
+	}
+	
+	public int getY() {
+		return yCoord;
 	}
 	
 	public void clearList() { 
@@ -86,51 +118,36 @@ public class Zantar {
 	}
 	
 	public void printXY() {
-		System.out.println("Zantar's position is: xCoord: " + xCoord + ", yCoord: " + yCoord);
+		System.out.println(String.format("Zantar's position is (%s, %s)", xCoord, yCoord));
 	}
 	
 	public int attack() {
-		// TODO Auto-generated method stub
-		return 0;
+		return attack_strength;
 	}
 
 	public void takeDamage(int enemyAttack) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Object getPouch() {
-		// TODO Auto-generated method stub
-		return null;
+		health -= enemyAttack;		
 	}
 
 	public int health() {
-		// TODO Auto-generated method stub
 		return health;
 	}
 
 	public void reset() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void increaseEnemiesKilled() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public String enemiesKilled() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void removeCoins(int penanceForCowardliness) {
-		// TODO Auto-generated method stub
-		
+	public void removeCoins(int coins) {
+		Backpack.getInstance().removeCoins(coins);
 	}
 
 	public Backpack getBackpack() {
-		// TODO Auto-generated method stub
 		return backpack;
 	}
 

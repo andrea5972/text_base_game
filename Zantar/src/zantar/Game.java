@@ -22,13 +22,19 @@ public class Game {
 	public static final int exit_game = 4;                                                                                                                                                                                       
     */
 	
-	/** The string which contains all accepted answers to yes or no questions                                                                                                                            
-	public static final String confirmation = "yes no";                                                                                                                                                                          
-                                                                                                                                                                                                                                 
+	// The string which contains all accepted answers to yes or no questions                                                                                                                            
+	private static final String confirmation = "yes no";           
+	private static final String movements = "north south east west undo";
+	private static final String game_commands = "quit help";
+    
+	/**
 	public static final long delay = 2000;                                                                                                                                                                                       
                                                                                                                                                                                                                                  
 	public static final int max_gold = 30;
 	*/       
+    
+	private static boolean runningGame = false;
+	private static boolean ranAway = false;
 	
 	public static final long delay = 2000;                                                                                                                                                                                                                             
 	public static final int penance_for_cowardliness = 5;                                                                                                                                                                             
@@ -37,74 +43,51 @@ public class Game {
 		
 		// Main character                                                                                                                                                                                                        
 		Zantar zantar = Zantar.getInstance();
-		//Backpack backpack = zantar.getBackpack();
-		Map map = Map.getInstance();
-		//System.out.println(new File(".").getAbsoluteFile());
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-		boolean running = true;
-		boolean menu = true;
-		boolean ranAway = false;
-		boolean moving = false;
-		boolean starting = true;
 		
-				
-		while (running) {
+		System.out.println("\nWelcome! Zantar and his mighty quest awaits. "
+				+ "If you wish to play the game, enter 'start'.\n"
+				+ "For help. enter 'help'. To 'quit', enter quit!");
+		
+		showMenuTillStartOrStop();
+		if (runningGame) {
+			zantar.printXY();
+		}
+		                                 
+		while (runningGame) {
+			System.out.print("\n>> ");
+			String choice = SCANNER.nextLine().toLowerCase();
 			
-			while (menu) {
-				System.out.println("\nWelcome! Zantar and his mighty quest awaits.\n"
-						+ "If you wish to play the game, enter Start.\n"
-						+ "For help. enter Help. To quit, enter Quit!\n");
-				String choice = SCANNER.nextLine();
-				if (choice.toLowerCase().equals("start")) {
-					menu = false;
-					moving = true;
+			if (movements.contains(choice)) {
+				moveZantar(choice);
+			} else if (game_commands.contains(choice)) {
+				if (choice.equals("quit")) {
+					stopGame();
+				} else if (choice.equals("help")) {
+					showHelp();
 				}
-				else if (choice.toLowerCase().equals("help")) {
-					System.out.println("\nZantar is a text based adventure in which you control Zantar,\n"
-							+ "a mighty space warrior. You'll navigate around areas, picking up items\n"
-							+ "and battling enemies. At any point, hit the ESC key to bring up the menu again.\n");
-				}
-				else if (choice.toLowerCase().equals("quit")) {
-					System.out.println("\nZantar will await your return, but be careful not to be away too long,\n"
-							+ "as the Evil King will not wait on his journey for control of the planet!\n");
-					menu = false;
-					running = false;
-				}
-				else {
-					System.out.println("\nThat command is not acceptable here, please try again!\n");
-				}
+			} else {
+				System.out.println("Zantar doesn't understand!");
+				System.out.println("Enter help to get help.");
 			}
 			
-			// Introduction to the Game                                                                                                                                                                                              
-			if (starting) {
-				System.out.println("Welcome, mighty Zantar, on your quest to save the planet Mangani.\n"
-					+ "You arrived last night in the middle of a jungle, but your\n"
-					+ "items were stolen while you slept! You'll need to search\n"
-					+ "and find them to have any chance of defeating\n"
-					+ "the Evil King. What will you do first?\n\n"
-					+ "There are openings to the north, east, south, and west.\n");
-				starting = false;
-			}
-			
-			while (moving) {
-				
-				//zantar.printXY();
-				String choice = SCANNER.nextLine();
-				zantar.move(choice);
-				//if (zantar.move(choice)) {
-				//	System.out.println("You moved " + choice.toLowerCase() + "!");
-				//}
-				
-			}
 		}
 	}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                
-	private static void printStatistics(Zantar zantar, Enemy villain) {
-			
+	
+	private static void moveZantar(String choice) {
+		Zantar z = Zantar.getInstance();
+		z.move(choice);
+		z.printXY();
+
+		String locData = Map.getInstance().getLocationData(z.getX(), z.getY());
+		
+		if (locData != null) {
+			System.out.println(String.format("Zantar found %s. What would you like to do?", 
+					locData));
+		}
 	}
                                                                                                                                                                                                                           
 	// The battle prompt menu                                                                                                                                                                                                                                                                                                                                                                                                          
-	public static void startBattle()                                                                                                                                                                                             
+	private static void startBattle()                                                                                                                                                                                             
 	{                                                                                                                                                                                                                            
 		System.out.println("\n1. Attack.");                                                                                                                                                                                      
 		System.out.println("2. Use Item");                                                                                                                                                                                    
@@ -112,12 +95,57 @@ public class Game {
 		System.out.println("4. Exit Game.");                                                                                                                                                                                     
                                                                                                                                                                                                                                  
 		System.out.print("\nChoice? ");                                                                                                                                                                                          
-	}                                                                                                                                                                                                   
+	}            
+	
+	private static void showHelp() {
+		System.out.println("Zantar is a text based adventure in which you control Zantar,"
+				+ "a mighty space warrior. \nYou'll navigate around areas, picking up items"
+				+ "and battling enemies.\n");
+		System.out.println("Enter 'north', 'south', 'east' or 'west' to move.\nEnter 'undo' to undo "
+				+ "last action.\nEnter 'pickup' to pickup item.\nEnter 'item list' to"
+				+ " list all items in your backpack.\nEnter 'equip itemname' to equip item");
+		System.out.println("Enter 'quit' to quit game");
+	}
+	
+	private static void startGame() {
+		// Introduction to the Game       
+		System.out.println("Welcome, mighty Zantar, on your quest to save the planet Mangani"
+				+ "You arrived last night in the middle of a jungle, but your \n"
+				+ "items were stolen while you slept! You'll need to search "
+				+ "and find them to have any chance of defeating\n"
+				+ "the Evil King. What will you do first?\n\n"
+				+ "There are openings to the north, east, south, and west.\n");		
+		runningGame = true;
+	}
+	
+	private static void stopGame() {
+
+		System.out.println("\nZantar will await your return, but be careful not to be away too long,\n"
+				+ "as the Evil King will not wait on his journey for control of the planet!\n");
+		runningGame = false;
+	}
+	
+	private static void showMenuTillStartOrStop() {
+		System.out.print("\n>> ");
+		String choice = SCANNER.nextLine();
+		if (choice.toLowerCase().equals("start")) {
+			startGame();
+		} else if (choice.toLowerCase().equals("help")) {
+			showHelp();
+			showMenuTillStartOrStop();
+		}
+		else if (choice.toLowerCase().equals("quit")) {
+			stopGame();
+		} else {
+			System.out.println("\nThat command is not acceptable here, please try again!\n");
+			showMenuTillStartOrStop();
+		}
+	}
                                                                                                                                                                                                                                  
 	/**                                                                                                                                                                                                                          
 	 * Prints the statistics of the game                                                                                                                                           
 	 */                                                                                                                                                                                                                          
-	public static void printStatistics1(Zantar zantar, Enemy villain )                                                                                                                                                            
+	public static void printStatistics(Zantar zantar, Enemy villain )                                                                                                                                                            
 	{                                                                                                                                                                                                                            
 		// Statistics                                                                                                                                                                                                            
 		System.out.println("\f# A " + villain.name() + " appeared #");                                                                                                                                                           
