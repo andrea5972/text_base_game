@@ -28,6 +28,7 @@ public class Game {
 	private static final String movements = "north south east west undo";
 	private static final String game_commands = "quit help";
 	private static final String item_commands = "equip backpack";
+	private static final String battle_commands = "";
     
 	/**
 	public static final long delay = 2000;                                                                                                                                                                                       
@@ -60,12 +61,6 @@ public class Game {
 			
 			if (movements.contains(choice)) {
 				moveZantar(choice);
-			} else if (game_commands.contains(choice)) {
-				if (choice.equals("quit")) {
-					stopGame();
-				} else if (choice.equals("help")) {
-					showHelp();
-				}
 			} else if (item_commands.contains(choice)) {
 				if (choice.equals("backpack")) {
 					Backpack.getInstance().printBackPack();
@@ -75,6 +70,14 @@ public class Game {
 				System.out.println("Enter help to get help.");
 			}
 			
+		}
+	}
+	
+	private static void executeGameCommands(String choice) {
+		if (choice.equals("quit")) {
+			stopGame();
+		} else if (choice.equals("help")) {
+			showHelp();
 		}
 	}
 	
@@ -104,6 +107,7 @@ public class Game {
 				if (foundItem(locData)) {
 					Map.getInstance().removeLocationData(z.getX(), z.getY());
 				}
+				Zantar.getInstance().printXY();
 			}
 		}
 	}
@@ -133,7 +137,6 @@ public class Game {
 			return true;
 		} else if (choice.equals("ignore")) {
 			System.out.println("*Zantar ignores " + itemName + " and continues on his journey.");
-			Zantar.getInstance().printXY();
 			return false;
 		} else {
 			System.out.println("Zantar doesn't understand.");
@@ -225,7 +228,13 @@ public class Game {
 	
 	private static String getChoice() {
 		System.out.print("\n>> ");
-		return SCANNER.nextLine().toLowerCase();
+		String choice = SCANNER.nextLine().toLowerCase();
+		if (game_commands.contains(choice)) {
+			executeGameCommands(choice);
+			return getChoice();
+		} else {
+			return choice;
+		}
 	}
                                                                                                                                                                                                                                  
 	/**                                                                                                                                                                                                                          
