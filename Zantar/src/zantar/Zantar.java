@@ -18,10 +18,14 @@ public class Zantar {
 	private int health = 20;
 	private int index = -1;
 	private int attack_strength = 10;
+	private double attackProbility = 0.5;
+	private String[] enemiesKilled;
+	private int numEnemiesKilled = 0;
 	
 	private Zantar() {
 		zantar = new ArrayList<>();
 		backpack = Backpack.getInstance();
+		enemiesKilled = new String[4];
 	}
 	
 	public static Zantar getInstance() {
@@ -133,14 +137,24 @@ public class Zantar {
 		return health;
 	}
 
-	public void reset() {
+	public void runAway() {
+		xCoord = 0;
+		yCoord = 0;
+		zantar.clear();
+		index = -1;
 	}
 
-	public void increaseEnemiesKilled() {
+	public void increaseEnemiesKilled(String enemy) {
+		enemiesKilled[numEnemiesKilled] = enemy;
+		numEnemiesKilled++;
 	}
 
 	public String enemiesKilled() {
-		return null;
+		return String.join(", ", enemiesKilled);
+	}
+	
+	public int getNumEnemiesKilled() {
+		return numEnemiesKilled;
 	}
 
 	public void removeCoins(int coins) {
@@ -149,6 +163,18 @@ public class Zantar {
 
 	public Backpack getBackpack() {
 		return backpack;
+	}
+	
+	public double getAttackProbability() {
+		return attackProbility;
+	}
+	
+	public void setAttackProbability(double p) {
+		this.attackProbility = p;
+	}
+	
+	public void setAttackStrength(int attackStrength) {
+		this.attack_strength = attackStrength;
 	}
 
 }
