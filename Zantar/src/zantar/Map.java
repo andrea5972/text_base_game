@@ -65,4 +65,8 @@ public class Map {
 	public String getLocationData(int x, int y) {
 		return map[x + 5][y + 5];
 	}
+	
+	public void removeLocationData(int x, int y) {
+		map[x + 5][y + 5] = null;
+	}
 }

@@ -8,6 +8,7 @@ package zantar;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Random;                                                                                                                                                                                                         
                                                                                                                                                                                                     
                                                                                                                                                                                                                                  
@@ -26,6 +27,7 @@ public class Game {
 	private static final String confirmation = "yes no";           
 	private static final String movements = "north south east west undo";
 	private static final String game_commands = "quit help";
+	private static final String item_commands = "equip itemlist";
     
 	/**
 	public static final long delay = 2000;                                                                                                                                                                                       
@@ -54,8 +56,7 @@ public class Game {
 		}
 		                                 
 		while (runningGame) {
-			System.out.print("\n>> ");
-			String choice = SCANNER.nextLine().toLowerCase();
+			String choice = getChoice();
 			
 			if (movements.contains(choice)) {
 				moveZantar(choice);
@@ -64,6 +65,10 @@ public class Game {
 					stopGame();
 				} else if (choice.equals("help")) {
 					showHelp();
+				}
+			} else if (item_commands.contains(choice)) {
+				if (choice.equals("itemlist")) {
+					Backpack.getInstance().printBackPack();
 				}
 			} else {
 				System.out.println("Zantar doesn't understand!");
@@ -81,8 +86,43 @@ public class Game {
 		String locData = Map.getInstance().getLocationData(z.getX(), z.getY());
 		
 		if (locData != null) {
-			System.out.println(String.format("Zantar found %s. What would you like to do?", 
-					locData));
+			if (locData.equals("enemy")) {
+			} else {
+				if (foundItem(locData)) {
+					Map.getInstance().removeLocationData(z.getX(), z.getY());
+				}
+			}
+		}
+	}
+	
+	private static boolean foundItem(String itemName) {
+		System.out.println(String.format("Zantar found %s. What would you like to do?", 
+				itemName));
+		String choice = getChoice();
+		if (choice.equals("pickup")) {
+			if (itemName.equals("sword")) {
+				Backpack.getInstance().addItem(new Item(itemName, 25, true, 6, 0.3, 0.6));
+				System.out.println("Zantar picked up sword successfully! "
+						+ "He placed it in his backpack");
+			} else if (itemName.equals("dagger")) {
+				Backpack.getInstance().addItem(new Item(itemName, 15, true, 6, 0.5, 0.75));
+				System.out.println("Zantar picked up dagger successfully! "
+						+ "He placed it in his backpack");
+			} else if (itemName.equals("axe")) {
+				Backpack.getInstance().addItem(new Item(itemName, 30, true, 6, 0.5, 0.7));
+				System.out.println("Zantar picked up axe successfully! "
+						+ "He placed it in his backpack");
+			} else if (itemName.equals("stick")) {
+				Backpack.getInstance().addItem(new Item(itemName, 5, true, 2, 0.5, 0.75));
+				System.out.println("Zantar picked up stick successfully! "
+						+ "He placed it in his backpack");
+			}
+			return true;
+		} else if (choice.equals("ignore")) {
+			return false;
+		} else {
+			System.out.println("Zantar doesn't understand.");
+			return foundItem(itemName);
 		}
 	}
                                                                                                                                                                                                                           
@@ -102,7 +142,7 @@ public class Game {
 				+ "a mighty space warrior. \nYou'll navigate around areas, picking up items"
 				+ "and battling enemies.\n");
 		System.out.println("Enter 'north', 'south', 'east' or 'west' to move.\nEnter 'undo' to undo "
-				+ "last action.\nEnter 'pickup' to pickup item.\nEnter 'item list' to"
+				+ "last action.\nEnter 'pickup' to pickup item.\nEnter 'itemlist' to"
 				+ " list all items in your backpack.\nEnter 'equip itemname' to equip item");
 		System.out.println("Enter 'quit' to quit game");
 	}
@@ -119,15 +159,13 @@ public class Game {
 	}
 	
 	private static void stopGame() {
-
 		System.out.println("\nZantar will await your return, but be careful not to be away too long,\n"
 				+ "as the Evil King will not wait on his journey for control of the planet!\n");
 		runningGame = false;
 	}
 	
 	private static void showMenuTillStartOrStop() {
-		System.out.print("\n>> ");
-		String choice = SCANNER.nextLine();
+		String choice = getChoice();
 		if (choice.toLowerCase().equals("start")) {
 			startGame();
 		} else if (choice.toLowerCase().equals("help")) {
@@ -140,6 +178,11 @@ public class Game {
 			System.out.println("\nThat command is not acceptable here, please try again!\n");
 			showMenuTillStartOrStop();
 		}
+	}
+	
+	private static String getChoice() {
+		System.out.print("\n>> ");
+		return SCANNER.nextLine().toLowerCase();
 	}
                                                                                                                                                                                                                                  
 	/**                                                                                                                                                                                                                          
