@@ -56,6 +56,10 @@ public class Backpack{
     public void printBackPack() {
     	System.out.println("Currently your backpack contains:");
     	System.out.println("Gold: " + coins);
+    	if (itemList.size() == 0) {
+    		System.out.println("Items: None");
+    		return;
+    	}
     	for (Item item : itemList) {
     		System.out.println(item.toString());
     	}

@@ -27,7 +27,7 @@ public class Game {
 	private static final String confirmation = "yes no";           
 	private static final String movements = "north south east west undo";
 	private static final String game_commands = "quit help";
-	private static final String item_commands = "equip itemlist";
+	private static final String item_commands = "equip backpack";
     
 	/**
 	public static final long delay = 2000;                                                                                                                                                                                       
@@ -39,7 +39,7 @@ public class Game {
 	private static boolean ranAway = false;
 	
 	public static final long delay = 2000;                                                                                                                                                                                                                             
-	public static final int penance_for_cowardliness = 5;                                                                                                                                                                             
+	public static final int penance_for_cowardliness = 30;                                                                                                                                                                             
                                                                                                                                                                                                                                  
 	public static void main(String[] argument) throws FileNotFoundException {                                                                                                                                                                                  
 		
@@ -67,7 +67,7 @@ public class Game {
 					showHelp();
 				}
 			} else if (item_commands.contains(choice)) {
-				if (choice.equals("itemlist")) {
+				if (choice.equals("backpack")) {
 					Backpack.getInstance().printBackPack();
 				}
 			} else {
@@ -87,6 +87,19 @@ public class Game {
 		
 		if (locData != null) {
 			if (locData.equals("enemy")) {
+				Enemy enemy = new Enemy();
+				if(foundEnemy(enemy)) { 
+					
+				} else {
+					Zantar.getInstance().runAway();
+					System.out.println("*Zantar takes a deep breath and thinks 'As long"
+							+ " as I have my life, I can go back and kill that " + 
+							enemy.name() + " anytime!\nI will adventure more and go "
+							+ "back to kill "+ enemy.name() + " when I get stronger!'"
+							+ "* Let's start over!");
+					Backpack.getInstance().printBackPack();
+					Zantar.getInstance().printXY();
+				}
 			} else {
 				if (foundItem(locData)) {
 					Map.getInstance().removeLocationData(z.getX(), z.getY());
@@ -119,22 +132,52 @@ public class Game {
 			}
 			return true;
 		} else if (choice.equals("ignore")) {
+			System.out.println("*Zantar ignores " + itemName + " and continues on his journey.");
+			Zantar.getInstance().printXY();
 			return false;
 		} else {
 			System.out.println("Zantar doesn't understand.");
 			return foundItem(itemName);
 		}
 	}
+	
+	private static boolean foundEnemy(Enemy enemy) {
+		System.out.println("Zantar and " + enemy.name() + " are facing each other.");
+		System.out.println("Would you like to fight or beg for mercy");
+		String choice = getChoice();
+		if (choice.equals("fight")) {
+			return startBattle();
+		} else if ("beg for mercy".contains(choice)) {
+			begForMercy(enemy.name());
+			return false;
+		} else {
+			System.out.println("Zantar doesn't understand.");
+			return foundEnemy(enemy);
+		}
+	}
+	
+	private static void begForMercy(String enemy) {
+		System.out.println("*Zantar starts to kowtow*.\nOh mighty " + enemy + "! "
+				+ "Please spare weak little me.");
+		System.out.println("*" + enemy + " laughs smugly*\nHAHAHA! Give me " 
+				+ penance_for_cowardliness + " gold and I shall "
+				+ "spare your puny little life!");
+		System.out.println("*Zantar quickly takes out " + penance_for_cowardliness 
+				+ " gold and tosses it over " + "to " + enemy + "*");
+		Backpack.getInstance().removeCoins(penance_for_cowardliness);
+		System.out.println("*Then Zantar runs away*");
+	}
                                                                                                                                                                                                                           
 	// The battle prompt menu                                                                                                                                                                                                                                                                                                                                                                                                          
-	private static void startBattle()                                                                                                                                                                                             
+	private static boolean startBattle()                                                                                                                                                                                             
 	{                                                                                                                                                                                                                            
 		System.out.println("\n1. Attack.");                                                                                                                                                                                      
 		System.out.println("2. Use Item");                                                                                                                                                                                    
 		System.out.println("3. Run!");                                                                                                                                                                                                                                                                                                                                                                             
 		System.out.println("4. Exit Game.");                                                                                                                                                                                     
                                                                                                                                                                                                                                  
-		System.out.print("\nChoice? ");                                                                                                                                                                                          
+		System.out.print("\nChoice? ");   
+		return true;
 	}            
 	
 	private static void showHelp() {
@@ -142,7 +185,7 @@ public class Game {
 				+ "a mighty space warrior. \nYou'll navigate around areas, picking up items"
 				+ "and battling enemies.\n");
 		System.out.println("Enter 'north', 'south', 'east' or 'west' to move.\nEnter 'undo' to undo "
-				+ "last action.\nEnter 'pickup' to pickup item.\nEnter 'itemlist' to"
+				+ "last action.\nEnter 'pickup' to pickup item.\nEnter 'backpack' to"
 				+ " list all items in your backpack.\nEnter 'equip itemname' to equip item");
 		System.out.println("Enter 'quit' to quit game");
 	}
@@ -175,7 +218,7 @@ public class Game {
 		else if (choice.toLowerCase().equals("quit")) {
 			stopGame();
 		} else {
-			System.out.println("\nThat command is not acceptable here, please try again!\n");
+			System.out.println("Zantar doesn't understand!");
 			showMenuTillStartOrStop();
 		}
 	}
