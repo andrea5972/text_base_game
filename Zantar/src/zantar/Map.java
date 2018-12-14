@@ -19,6 +19,9 @@ public class Map {
 	public final int EAST_BOUNDARY;
 	public final int WEST_BOUNDARY;
 	
+	private final int x_norm;
+	private final int y_norm;
+	
 	private String[][] map = new String[11][11];
 	
 	private Map() {
@@ -30,10 +33,12 @@ public class Map {
 			String line = scanner.nextLine();
 			
 			String[] boundaries = line.split(",");
-			NORTH_BOUNDARY = Integer.parseInt(boundaries[0]);
-			SOUTH_BOUNDARY = Integer.parseInt(boundaries[1]);
-			EAST_BOUNDARY = Integer.parseInt(boundaries[2]);
-			WEST_BOUNDARY = Integer.parseInt(boundaries[3]);
+			x_norm = Integer.parseInt(boundaries[0]);
+			y_norm = Integer.parseInt(boundaries[1]);
+			NORTH_BOUNDARY = y_norm;
+			SOUTH_BOUNDARY = -1 * y_norm;
+			EAST_BOUNDARY = x_norm;
+			WEST_BOUNDARY = -1 * x_norm;
 			
 			for(int i = 0; i < 11; i++) {
 				for(int j = 0; j < 11; j++) {
@@ -63,10 +68,13 @@ public class Map {
 	}
 	
 	public String getLocationData(int x, int y) {
-		return map[x + 5][y + 5];
+		if (Math.abs(x) > x_norm || Math.abs(y) > y_norm) {
+			return null;
+		}
+		return map[x + x_norm][y + y_norm];
 	}
 	
 	public void removeLocationData(int x, int y) {
-		map[x + 5][y + 5] = null;
+		map[x + x_norm][y + y_norm] = null;
 	}
 }

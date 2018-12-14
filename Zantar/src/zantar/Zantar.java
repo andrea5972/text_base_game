@@ -19,6 +19,7 @@ public class Zantar {
 	private int index = -1;
 	private int attack_strength = 10;
 	private double attackProbility = 0.5;
+	private String attackName = "punched";
 	private String[] enemiesKilled;
 	private int numEnemiesKilled = 0;
 	
@@ -59,7 +60,7 @@ public class Zantar {
 			System.out.println("Zantar moved south.");
 			return true;
 		} else if (word.equals("east")) {
-			if (yCoord == Map.getInstance().EAST_BOUNDARY) {
+			if (xCoord == Map.getInstance().EAST_BOUNDARY) {
 				System.out.println("Zantar cannot proceed further east in this world!");
 				return false;
 			}
@@ -69,7 +70,7 @@ public class Zantar {
 			System.out.println("Zantar moved east.");
 			return true;
 		} else if (word.equals("west")) {
-			if (yCoord == Map.getInstance().WEST_BOUNDARY) {
+			if (xCoord == Map.getInstance().WEST_BOUNDARY) {
 				System.out.println("Zantar cannot proceed further west in this world!");
 				return false;
 			}
@@ -129,11 +130,16 @@ public class Zantar {
 	}
 	
 	public int attack() {
+		if (itemEquiped) {
+			return item.attackPower();
+		}
 		return attack_strength;
 	}
 
 	public void takeDamage(int enemyAttack) {
-		health -= enemyAttack;	
+		health -= enemyAttack;
+		if (health < 0)
+			health = 0;
 		System.out.println("Zantar lost " + enemyAttack + " HP! Zantar has " + health + " left!");
 	}
 
@@ -154,7 +160,16 @@ public class Zantar {
 	}
 
 	public String enemiesKilled() {
-		return String.join(", ", enemiesKilled);
+		String killed = "";
+		for (String enemy: enemiesKilled) {
+			if (enemy != null) {
+				killed += enemy+ ", ";
+			}
+		}
+		if (killed.isEmpty())
+			return "no enemies yet";
+		else
+			return killed.substring(0, killed.length() - 2);
 	}
 	
 	public int getNumEnemiesKilled() {
@@ -171,9 +186,16 @@ public class Zantar {
 	
 	public double getAttackProbabilityForEnemy(Enemy e) {
 		if (itemEquiped) {
-			return item.getHitProbability();
+			return item.getHitProbabilityForEnemy(e);
 		}
 		return attackProbility;
+	}
+	
+	public String getAttackName() {
+		if (itemEquiped) {
+			return item.getAttackName();
+		}
+		return attackName;
 	}
 	
 	public void setAttackProbability(double p) {

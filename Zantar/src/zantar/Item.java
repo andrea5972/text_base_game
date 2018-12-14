@@ -12,6 +12,7 @@ public class Item {
 	private final boolean isconsumable;
 	private final double hitProbability;
 	private final double weaknessOfVillianHitProbability;
+	private final String attackName;
 	
 	private boolean isunstopable = false;
 	private boolean isheal = false;
@@ -23,7 +24,7 @@ public class Item {
 	private int charges;
 	
 	public Item(String name, int power, boolean isConsumable, int charges, double hitProbability,
-			double weaknessOfVillianHitProbability) {
+			double weaknessOfVillianHitProbability, String attackName) {
 		this.name = name;
 		this.power = power;
 		this.isconsumable = isConsumable;
@@ -32,11 +33,12 @@ public class Item {
 		}
 		this.hitProbability = hitProbability;
 		this.weaknessOfVillianHitProbability = weaknessOfVillianHitProbability;
+		this.attackName = attackName;
 	}
 
 	public Item(boolean isconsumable, boolean isunstopable, boolean isheal, boolean isnoncombat, 
 			String name, String desc, String message, int power, int charges, double hitProbability,
-			double weaknessOfVillianHitProbability) {
+			double weaknessOfVillianHitProbability, String attackName) {
 		this.isconsumable = isconsumable;
 		this.isunstopable = isunstopable;
 		this.isheal = isheal;
@@ -48,6 +50,7 @@ public class Item {
 		this.charges = charges;
 		this.hitProbability = hitProbability;
 		this.weaknessOfVillianHitProbability = weaknessOfVillianHitProbability;
+		this.attackName = attackName;
 	} 
 	
 	public String use()
@@ -92,6 +95,10 @@ public class Item {
 		return name + " " + desc +" "+ power;
 	}
 	
+	public int attackPower() {
+		return power;
+	}
+	
 	public double getHitProbability() {
 		return hitProbability;
 	}
@@ -123,6 +130,10 @@ public class Item {
 		ret += Boolean.toString(equiped);
 		ret += ")";
 		return ret;
+	}
+	
+	public String getAttackName() {
+		return attackName;
 	}
 	
 	public void equip() {
