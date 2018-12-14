@@ -4,8 +4,16 @@
 0,-1+axe
 -1,0+stick
 3,2+gold,25
-2,3+gold,35
 5,0+enemy
 0,5+enemy
 -5,0+enemy
 0,-5+enemy
+-1,1+gold,15
+-3,5+gold,40
+-2,-1+gold,20
+-4,2+event
+-4,-4+event
+3,-1+event
+-4,1+gold,35
+5,5+gold,50
+5,-5+gold,10
