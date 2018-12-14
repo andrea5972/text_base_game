@@ -1,3 +1,7 @@
+/**
+ * Encounter class
+ *
+ */
 package zantar;
 
 public enum EncounterStatus {

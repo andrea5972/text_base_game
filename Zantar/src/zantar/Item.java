@@ -1,6 +1,6 @@
 /*
- * Author: Travis
- * Modified By: Raghava
+ * Item class
+ * Creates items for game
  */
 
 package zantar;
@@ -13,16 +13,16 @@ public class Item {
 	private final double hitProbability;
 	private final double weaknessOfVillianHitProbability;
 	private final String attackName;
-	
+
 	private boolean isunstopable = false;
 	private boolean isheal = false;
 	private boolean isnoncombat = false;
 	private String desc;
 	private String message;
 	private boolean equiped = false;
-	
+
 	private int charges;
-	
+
 	public Item(String name, int power, boolean isConsumable, int charges, double hitProbability,
 			double weaknessOfVillianHitProbability, String attackName) {
 		this.name = name;
@@ -36,7 +36,7 @@ public class Item {
 		this.attackName = attackName;
 	}
 
-	public Item(boolean isconsumable, boolean isunstopable, boolean isheal, boolean isnoncombat, 
+	public Item(boolean isconsumable, boolean isunstopable, boolean isheal, boolean isnoncombat,
 			String name, String desc, String message, int power, int charges, double hitProbability,
 			double weaknessOfVillianHitProbability, String attackName) {
 		this.isconsumable = isconsumable;
@@ -51,58 +51,58 @@ public class Item {
 		this.hitProbability = hitProbability;
 		this.weaknessOfVillianHitProbability = weaknessOfVillianHitProbability;
 		this.attackName = attackName;
-	} 
-	
+	}
+
 	public String use()
 	{
-		if(isconsumable) 
+		if(isconsumable)
 		{
 			charges = charges - 1;
 		}
-		if(isunstopable || isnoncombat ) 
+		if(isunstopable || isnoncombat )
 		{
 			return message;
 		}
-		
-		if(isheal) 
+
+		if(isheal)
 		{
 			return power + " health restored";
 		}
 		return"";
 	}
-	
+
 	public boolean concheck() {
 		return isconsumable;
 	}
-	
+
 	public boolean healcheck() {
 		return isheal;
 	}
-	
+
 	public boolean noncomcheck() {
 		return isnoncombat;
 	}
-	
+
 	public boolean stopcheck() {
 		return isunstopable;
 	}
-	
+
 	public int charcheck() {
 		return charges;
 	}
-	
+
 	public String info() {
 		return name + " " + desc +" "+ power;
 	}
-	
+
 	public int attackPower() {
 		return power;
 	}
-	
+
 	public double getHitProbability() {
 		return hitProbability;
 	}
-	
+
 	public double getHitProbabilityForEnemy(Enemy e) {
 		if (e.weakness(name)) {
 			return weaknessOfVillianHitProbability;
@@ -110,15 +110,15 @@ public class Item {
 			return hitProbability;
 		}
 	}
-	
+
 	public double getWeaknessOfVillianHitProbability() {
 		return weaknessOfVillianHitProbability;
 	}
-	
+
 	public String name() {
 		return name;
 	}
-	
+
 	public String toString() {
 		String ret = name + " (Uses left: ";
 		ret += charges;
@@ -131,11 +131,11 @@ public class Item {
 		ret += ")";
 		return ret;
 	}
-	
+
 	public String getAttackName() {
 		return attackName;
 	}
-	
+
 	public void equip() {
 		this.equiped = true;
 	}

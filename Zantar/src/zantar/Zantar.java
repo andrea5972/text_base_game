@@ -1,4 +1,5 @@
 /**
+ * Zantar class
  * Zantar the main character in this game.
  */
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class Zantar {
 
 	private static Zantar INSTANCE;
-	
+
 	private List<String> zantar;
 	private Backpack backpack;
 	private int xCoord = 0;
@@ -22,22 +23,22 @@ public class Zantar {
 	private String attackName = "punched";
 	private String[] enemiesKilled;
 	private int numEnemiesKilled = 0;
-	
+
 	private boolean itemEquiped = false;
 	private Item item;
-	
+
 	private Zantar() {
 		zantar = new ArrayList<>();
 		backpack = Backpack.getInstance();
 		enemiesKilled = new String[4];
 	}
-	
+
 	public static Zantar getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new Zantar();
 		return INSTANCE;
 	}
-	
+
 	public boolean move(String word) {
 		if (word.equals("north")) {
 			if (yCoord == Map.getInstance().NORTH_BOUNDARY) {
@@ -86,7 +87,7 @@ public class Zantar {
 			return false;
 		}
 	}
-	
+
 	public boolean undoMove() {
 		if (index < 0) {
 			System.out.println("No more moves left to undo!");
@@ -112,23 +113,23 @@ public class Zantar {
 		}
 		return true;
 	}
-	
+
 	public int getX() {
 		return xCoord;
 	}
-	
+
 	public int getY() {
 		return yCoord;
 	}
-	
-	public void clearList() { 
+
+	public void clearList() {
 		zantar.clear();
 	}
-	
+
 	public void printXY() {
 		System.out.println(String.format("Zantar's position is (%s, %s)", xCoord, yCoord));
 	}
-	
+
 	public int attack() {
 		if (itemEquiped) {
 			return item.attackPower();
@@ -171,7 +172,7 @@ public class Zantar {
 		else
 			return killed.substring(0, killed.length() - 2);
 	}
-	
+
 	public int getNumEnemiesKilled() {
 		return numEnemiesKilled;
 	}
@@ -183,48 +184,48 @@ public class Zantar {
 	public Backpack getBackpack() {
 		return backpack;
 	}
-	
+
 	public double getAttackProbabilityForEnemy(Enemy e) {
 		if (itemEquiped) {
 			return item.getHitProbabilityForEnemy(e);
 		}
 		return attackProbility;
 	}
-	
+
 	public String getAttackName() {
 		if (itemEquiped) {
 			return item.getAttackName();
 		}
 		return attackName;
 	}
-	
+
 	public void setAttackProbability(double p) {
 		this.attackProbility = p;
 	}
-	
+
 	public void equipItem(Item i) {
 		this.item = i;
 		this.itemEquiped = true;
 		item.equip();
 	}
-	
+
 	public Item getEquipedItem() {
 		return this.item;
 	}
-	
+
 	public void UnEquipItem() {
 		this.item = null;
 		itemEquiped = false;
 	}
-	
+
 	public void setAttackStrength(int attackStrength) {
 		this.attack_strength = attackStrength;
 	}
-	
+
 	public boolean isItemEquiped() {
 		return itemEquiped;
 	}
-	
+
 	public boolean isAlive() {
 		return health > 0;
 	}
