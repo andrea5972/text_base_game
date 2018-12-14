@@ -143,6 +143,10 @@ public class Zantar {
 			health = 0;
 		System.out.println("Zantar lost " + enemyAttack + " HP! Zantar has " + health + " left!");
 	}
+	
+	public void addHealth(int health) {
+		health += health;
+	}
 
 	public int health() {
 		return health;

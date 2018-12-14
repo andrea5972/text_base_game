@@ -153,10 +153,28 @@ public class Game {
 				if (eventChoice.equals("yes")) {
 					if (event.occurs()) {
 						String type = event.type();
-						String eventResult = event.action(type);
+						String[] eventResult = event.action(type).split(",");
+						if (type.equals("good")) {
+							if (eventResult[0].equals("gold")) {
+								System.out.println("While looking around the " + event.name() + ", Zantar found " + eventResult[1] + " gold! He added it to his backpack.");
+								Backpack.getInstance().addCoins(Integer.parseInt(eventResult[1]));
+							} else {
+								System.out.println("While looking around the " + event.name() + ", Zantar found some food! He eats it and gains " + eventResult[1] + " health!");
+								Zantar.getInstance().addHealth(Integer.parseInt(eventResult[1]));
+							}
+						} else {
+							if (eventResult[0].equals("gold")) {
+								System.out.println("While looking around the " + event.name() + ", Zantar is ambushed! The robbers steal " + eventResult[1] + " gold and leave Zantar afraid.");
+								Backpack.getInstance().addCoins(Integer.parseInt(eventResult[1]) * -1);
+							} else {
+								System.out.println("While looking around the " + event.name() + ", Zantar sprung a trap and he loses " + eventResult[1] + " health!");
+								Zantar.getInstance().addHealth(Integer.parseInt(eventResult[1]) * -1);
+							}
+						}
 					} else {
-						System.out.println("He looks around but there's nothing else of interest.\n");
+						System.out.println("He looks around but there's nothing else of interest.");
 					}
+					Backpack.getInstance().printBackPack();
 					Map.getInstance().removeLocationData(z.getX(), z.getY());
 				} else if (eventChoice.equals("no")) {
 					System.out.println("Zantar ignores the " + event.name() + " and continues on his journey.");
@@ -171,11 +189,6 @@ public class Game {
 				Zantar.getInstance().printXY();
 			}
 		}
-	}
-
-	private static void foundText() {
-		
-		Backpack.getInstance().printBackPack();
 	}
 	
 	private static boolean foundItem(String itemName) {

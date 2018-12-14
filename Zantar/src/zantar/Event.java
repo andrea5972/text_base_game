@@ -31,11 +31,11 @@ public class Event {
 	
 	public boolean occurs() {
 		//String event = event.substring(0, 1).toUpperCase() + event.substring(1);
-		//int n = random.nextInt(1);
-		int n = 0; // Hard set to no due to time constraints
+		int n = random.nextInt(1);
+		//int n = 1; // Hard set to no due to time constraints
 		if (event == "stump") {
-			//return true;
-			return false;
+			//return true; 
+			return false; // Hard set to no due to time constraints
 		} else if (n == 1) {
 			return true;
 		} else {
@@ -50,7 +50,8 @@ public class Event {
 	public String type() {
 		int n = random.nextInt(10);
 		if (event == "stump") {
-			return "stump";
+			//return "stump";
+			return "bad"; // Hard set to no due to time constraints
 		} else if (n > 7) {
 			return "bad";
 		} else {
@@ -59,7 +60,7 @@ public class Event {
 	}
 	
 	public String action(String type) {
-		int amnt = random.nextInt(10) + 1;
+		int amnt = random.nextInt(20) + 1;
 		int n = random.nextInt(1);
 		if (n == 1) {
 			return("gold," + Integer.toString(amnt));
