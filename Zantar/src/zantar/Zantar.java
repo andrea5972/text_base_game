@@ -6,21 +6,30 @@ package zantar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Zantar {
 
 	private static Zantar INSTANCE;
+	
 	private List<String> zantar;
 	private Backpack backpack;
 	private int xCoord = 0;
 	private int yCoord = 0;
-	private int health = 20;
+	private int health = 100;
 	private int index = -1;
+	private int attack_strength = 10;
+	private double attackProbility = 0.5;
+	private String attackName = "punched";
+	private String[] enemiesKilled;
+	private int numEnemiesKilled = 0;
+	
+	private boolean itemEquiped = false;
+	private Item item;
 	
 	private Zantar() {
 		zantar = new ArrayList<>();
 		backpack = Backpack.getInstance();
+		enemiesKilled = new String[4];
 	}
 	
 	public static Zantar getInstance() {
@@ -30,55 +39,86 @@ public class Zantar {
 	}
 	
 	public boolean move(String word) {
-		//System.out.println(word);
-		if (word.toLowerCase().equals("north")) {
+		if (word.equals("north")) {
+			if (yCoord == Map.getInstance().NORTH_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further north in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			yCoord++;
-			System.out.println("Zantar moved north. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved north.");
 			return true;
-		}
-		else if (word.toLowerCase().equals("south")) {
+		} else if (word.equals("south")) {
+			if (yCoord == Map.getInstance().SOUTH_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further south in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			yCoord--;
-			System.out.println("Zantar moved south. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved south.");
 			return true;
-		}
-		else if (word.toLowerCase().equals("east")) {
+		} else if (word.equals("east")) {
+			if (xCoord == Map.getInstance().EAST_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further east in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			xCoord++;
-			System.out.println("Zantar moved east. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved east.");
 			return true;
-		}
-		else if (word.toLowerCase().equals("west")) {
+		} else if (word.equals("west")) {
+			if (xCoord == Map.getInstance().WEST_BOUNDARY) {
+				System.out.println("Zantar cannot proceed further west in this world!");
+				return false;
+			}
 			zantar.add(word);
+			index++;
 			xCoord--;
-			System.out.println("Zantar moved west. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+			System.out.println("Zantar moved west.");
 			return true;
-		}
-		else {
-			System.out.println("Zantar could not go that way. xCoord: " + xCoord + ", yCoord: " + yCoord + "\n");
+		} else if (word.equals("undo")) {
+			return undoMove();
+		} else {
+			System.out.println("Zantar could not go that way!");
 			return false;
 		}
 	}
 	
-	public void undoMove(String word) {
-		zantar.remove(word);
-		if (word == "north") {
+	public boolean undoMove() {
+		if (index < 0) {
+			System.out.println("No more moves left to undo!");
+			return false;
+		}
+		String word = zantar.remove(index);
+		index--;
+		if (word.equals("north")) {
 			yCoord--;
-			System.out.println("Zantar moved south. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved south.");
 		}
-		else if (word == "south") {
+		else if (word.equals("south")) {
 			yCoord++;
-			System.out.println("Zantar moved north. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved north.");
 		}
-		else if (word == "east") {
+		else if (word.equals("east")) {
 			xCoord--;
-			System.out.println("Zantar moved west. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved west.");
 		}
-		else if (word == "west") {
+		else if (word.equals("west")) {
 			xCoord++;
-			System.out.println("Zantar moved east. xCoord: " + xCoord + ", yCoord: " + yCoord);
+			System.out.println("Zantar moved east.");
 		}
+		return true;
+	}
+	
+	public int getX() {
+		return xCoord;
+	}
+	
+	public int getY() {
+		return yCoord;
 	}
 	
 	public void clearList() { 
@@ -86,52 +126,107 @@ public class Zantar {
 	}
 	
 	public void printXY() {
-		System.out.println("Zantar's position is: xCoord: " + xCoord + ", yCoord: " + yCoord);
+		System.out.println(String.format("Zantar's position is (%s, %s)", xCoord, yCoord));
 	}
 	
 	public int attack() {
-		// TODO Auto-generated method stub
-		return 0;
+		if (itemEquiped) {
+			return item.attackPower();
+		}
+		return attack_strength;
 	}
 
 	public void takeDamage(int enemyAttack) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Object getPouch() {
-		// TODO Auto-generated method stub
-		return null;
+		health -= enemyAttack;
+		if (health < 0)
+			health = 0;
+		System.out.println("Zantar lost " + enemyAttack + " HP! Zantar has " + health + " left!");
 	}
 
 	public int health() {
-		// TODO Auto-generated method stub
 		return health;
 	}
 
-	public void reset() {
-		// TODO Auto-generated method stub
-		
+	public void runAway() {
+		xCoord = 0;
+		yCoord = 0;
+		zantar.clear();
+		index = -1;
 	}
 
-	public void increaseEnemiesKilled() {
-		// TODO Auto-generated method stub
-		
+	public void increaseEnemiesKilled(String enemy) {
+		enemiesKilled[numEnemiesKilled] = enemy;
+		numEnemiesKilled++;
 	}
 
 	public String enemiesKilled() {
-		// TODO Auto-generated method stub
-		return null;
+		String killed = "";
+		for (String enemy: enemiesKilled) {
+			if (enemy != null) {
+				killed += enemy+ ", ";
+			}
+		}
+		if (killed.isEmpty())
+			return "no enemies yet";
+		else
+			return killed.substring(0, killed.length() - 2);
+	}
+	
+	public int getNumEnemiesKilled() {
+		return numEnemiesKilled;
 	}
 
-	public void removeCoins(int penanceForCowardliness) {
-		// TODO Auto-generated method stub
-		
+	public void removeCoins(int coins) {
+		Backpack.getInstance().removeCoins(coins);
 	}
 
 	public Backpack getBackpack() {
-		// TODO Auto-generated method stub
 		return backpack;
+	}
+	
+	public double getAttackProbabilityForEnemy(Enemy e) {
+		if (itemEquiped) {
+			return item.getHitProbabilityForEnemy(e);
+		}
+		return attackProbility;
+	}
+	
+	public String getAttackName() {
+		if (itemEquiped) {
+			return item.getAttackName();
+		}
+		return attackName;
+	}
+	
+	public void setAttackProbability(double p) {
+		this.attackProbility = p;
+	}
+	
+	public void equipItem(Item i) {
+		this.item = i;
+		this.itemEquiped = true;
+		item.equip();
+	}
+	
+	public Item getEquipedItem() {
+		return this.item;
+	}
+	
+	public void UnEquipItem() {
+		this.item = null;
+		itemEquiped = false;
+	}
+	
+	public void setAttackStrength(int attackStrength) {
+		this.attack_strength = attackStrength;
+	}
+	
+	public boolean isItemEquiped() {
+		return itemEquiped;
+	}
+	
+	public boolean isAlive() {
+		return health > 0;
 	}
 
 }
