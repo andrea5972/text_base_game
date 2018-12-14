@@ -49,8 +49,8 @@ public class Game {
 		Zantar zantar = Zantar.getInstance();
 
 		System.out.println("\nWelcome, Zantar on your mighty quest to save the world!\n "
-				+ "If you wish to play the game- enter 'start'\n"
-				+ "For help and list possible option- enter 'help'\n If you want to quit- enter 'quit'\n");
+				+ "If you wish to play the game - enter 'start'\n"
+				+ " For help and list possible option - enter 'help'\n If you want to quit - enter 'quit'\n");
 
 		showMenuTillStartOrStop();
 		if (runningGame) {
@@ -146,6 +146,24 @@ public class Game {
 				villain = null;
 				Backpack.getInstance().printBackPack();
 				Zantar.getInstance().printXY();
+			} else if (locData.equals("event")) {
+				Event event = new Event();
+				System.out.println("Zantar found a " + event.name() + "! Does he want to investigate it? (yes/no)\n");
+				String eventChoice = getChoice();
+				if (eventChoice.equals("yes")) {
+					if (event.occurs()) {
+						String type = event.type();
+						String eventResult = event.action(type);
+					} else {
+						System.out.println("He looks around but there's nothing else of interest.\n");
+					}
+					Map.getInstance().removeLocationData(z.getX(), z.getY());
+				} else if (eventChoice.equals("no")) {
+					System.out.println("Zantar ignores the " + event.name() + " and continues on his journey.");
+				} else {
+					System.out.println("Zantar doesn't understand.");
+				}
+				Zantar.getInstance().printXY();
 			} else {
 				if (foundItem(locData)) {
 					Map.getInstance().removeLocationData(z.getX(), z.getY());
@@ -155,7 +173,18 @@ public class Game {
 		}
 	}
 
+	private static void foundText() {
+		
+		Backpack.getInstance().printBackPack();
+	}
+	
 	private static boolean foundItem(String itemName) {
+		String[] itemList = null;
+		if (itemName.contains("gold")) {
+			itemList = itemName.split(",");
+			itemName = itemList[1] + " " + itemList[0];
+			
+		}
 		System.out.println(String.format("Zantar found %s. What would you like to do?",
 				itemName));
 		String choice = getChoice();
@@ -180,6 +209,10 @@ public class Game {
 						"hit"));
 				System.out.println("Zantar picked up stick successfully! "
 						+ "He placed it in his backpack");
+			}
+			else if (itemName.contains("gold")) {
+				Backpack.getInstance().addCoins(Integer.parseInt(itemList[1]));
+				System.out.println(String.format("Zantar picked up %s successfully! He placed it in his backpack", itemName));
 			}
 			return true;
 		} else if (choice.equals("ignore")) {
@@ -329,7 +362,7 @@ public class Game {
 	private static void showHelp() {
 		System.out.println("Zantar is a text based adventure in which you control Zantar,"
 				+ "a mighty space warrior. \nYou'll navigate around areas, picking up items"
-				+ "and battling enemies.\n");
+				+ " and battling enemies.\n");
 		System.out.println("Enter 'north', 'south', 'east' or 'west' to move.\nEnter 'undo' to undo "
 				+ "last action.\nEnter 'pickup' to pickup item.\nEnter 'backpack' to"
 				+ " list all items in your backpack.\nEnter 'equip itemname' to equip item");
